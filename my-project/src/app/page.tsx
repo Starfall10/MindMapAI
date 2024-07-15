@@ -1,7 +1,21 @@
-import Image from "next/image";
 import { IoSendSharp } from "react-icons/io5";
+import { useState } from "react";
+import { init } from "next/dist/compiled/webpack/webpack";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export async function getData() {
+  const chat = await prisma.chat.findMany();
+  return {
+    props: {
+      chat,
+    },
+  };
+}
 
 export default async function Home() {
+  const chats = (await getData()).props.chat;
   return (
     <div>
       <div className="fixed bottom-0 w-full border-2 flex justify-between">
@@ -21,7 +35,12 @@ export default async function Home() {
           <IoSendSharp />
         </div>
       </div>
-      <ChatBubble text="Hello World" />
+      <h2>Chat</h2>
+      {chats.map((chat) => (
+        <div>
+          <ChatBubble text={chat.chat} />
+        </div>
+      ))}
     </div>
   );
 }
