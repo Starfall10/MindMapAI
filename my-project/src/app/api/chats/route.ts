@@ -21,3 +21,14 @@ export async function POST(
   return NextResponse.json({ data: savedContact });
 
 }
+
+export async function GET(
+  req: Request,
+  res: NextApiResponse
+) {
+
+  const chats = await prisma.chat.findMany()
+  console.log(chats)
+  return NextResponse.json(chats);
+
+}

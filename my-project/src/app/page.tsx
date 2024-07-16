@@ -1,13 +1,16 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { IoSendSharp } from "react-icons/io5";
-import { useState } from "react";
+import { createRef, useRef, useState } from "react";
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import ChatWindow from "./components/ChatWindow";
+import useSWR from "swr";
+import React from "react";
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
+  const [chatText, setChatText] = useState("");
+
   const [formData, setFormData] = useState({
     chatText: "",
   });
@@ -21,8 +24,6 @@ export default function Home() {
   };
 
   const {
-    register,
-    handleSubmit,
     formState: { errors },
   } = useForm();
 
@@ -36,11 +37,12 @@ export default function Home() {
       body: JSON.stringify(body),
     });
 
-    console.log(response);
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
 
-    // if (!response.ok) {
-    //   throw new Error(response.statusText);
-    // }
+    setFormData({ chatText: "" });
+
     return await response.json();
   }
 
@@ -58,30 +60,18 @@ export default function Home() {
             onChange={handleChange}
           />
         </form>
-        <div
+        <button
+          type="submit"
           className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
                 text-blue-500 hover:bg-green-600 hover:text-white
                 rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
         >
           <IoSendSharp />
-        </div>
+        </button>
       </div>
-      <h2>Chat</h2>
+      <div>
+        <ChatWindow />
+      </div>
     </div>
   );
 }
-
-interface ChatBubbleProps {
-  color?: string;
-  text?: string;
-}
-
-const ChatBubble = ({ text }: ChatBubbleProps) => {
-  return (
-    <div className="mt-2 flex">
-      <span className="ml-2 mt-2 border-2 p-1 rounded-2xl flex bg-blue-400">
-        {text}
-      </span>
-    </div>
-  );
-};
