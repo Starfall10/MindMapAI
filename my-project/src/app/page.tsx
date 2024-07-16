@@ -3,14 +3,44 @@ import { set, useForm } from "react-hook-form";
 import { IoSendSharp } from "react-icons/io5";
 import { createRef, useRef, useState } from "react";
 
-import ChatWindow from "./components/ChatWindow";
 import useSWR from "swr";
 import React from "react";
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import axios from "axios";
+import ChatBubble from "./components/ChatBubble";
+import { useRouter } from "next/router";
+
+// ----------------- Fetch Chat ------------------------/
+
+const fetcher = (url: string) =>
+  axios
+    .get(url, {})
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+
+export function ChatWindow() {
+  //   const data = useSWR("../api/chats", fetcher);
+  const { data, error } = useSWR("../api/chats", fetcher);
+  console.log("Data:", data);
+  console.log("Error:", error);
+
+  if (error) return <div>An error occured.</div>;
+  if (!data) return <div>Loading ...</div>;
+
+  return (
+    <div className="">
+      {data.data.map((chat: any) => (
+        <ChatBubble text={chat.chat} />
+      ))}
+    </div>
+  );
+}
+
+// ----------------- Contact API STUFF ------------------------/
 
 export default function Home() {
-  const [chatText, setChatText] = useState("");
-
+  const [chats, setChats] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     chatText: "",
   });
@@ -41,10 +71,16 @@ export default function Home() {
       throw new Error(response.statusText);
     }
 
+    // Refresh chat and clear input field
+    chats.push(formData.chatText);
+
+    setChats([...chats]);
     setFormData({ chatText: "" });
 
     return await response.json();
   }
+
+  // ----------------- Home Page ------------------------/
 
   return (
     <div>
@@ -56,7 +92,7 @@ export default function Home() {
             name="chatText"
             value={formData.chatText}
             placeholder="Enter a mindmap topic"
-            className="focus:outline-none my-2 ml-2"
+            className="focus:outline-none my-2 ml-2 w-80"
             onChange={handleChange}
           />
         </form>
@@ -71,6 +107,11 @@ export default function Home() {
       </div>
       <div>
         <ChatWindow />
+        {chats.map((chat) => (
+          <div>
+            <ChatBubble text={chat} />
+          </div>
+        ))}
       </div>
     </div>
   );
