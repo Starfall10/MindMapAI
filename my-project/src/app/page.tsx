@@ -22,8 +22,8 @@ const fetcher = (url: string) =>
 export function ChatWindow() {
   //   const data = useSWR("../api/chats", fetcher);
   const { data, error } = useSWR("../api/chats", fetcher);
-  console.log("Data:", data);
-  console.log("Error:", error);
+  // console.log("Data:", data);
+  // console.log("Error:", error);
 
   if (error) return <div>An error occured.</div>;
   if (!data) return <div>Loading ...</div>;
@@ -92,7 +92,7 @@ export default function Home() {
             name="chatText"
             value={formData.chatText}
             placeholder="Enter a mindmap topic"
-            className="focus:outline-none my-2 ml-2 w-80"
+            className="focus:outline-none my-2 ml-2 w-80 select-none"
             onChange={handleChange}
           />
         </form>
