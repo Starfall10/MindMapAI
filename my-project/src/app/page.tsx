@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { IoSendSharp } from "react-icons/io5";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 
 import useSWR from "swr";
@@ -40,9 +40,11 @@ export function ChatWindow() {
 // ----------------- Contact API STUFF ------------------------/
 
 export default function Home() {
+  const [isGenerating, setIsGenerating] = useState(false);
   const [imgURL, setImgURL] = useState("");
 
-  const mindmapstring = `\n* mindmap`;
+  const mindmapstring = `\n* mindmap \n** Key Messages \n  *** Connect with Friends and Family \n *** Unique Filipino Cultural Themes \n *** Available on Android and iOS \n  ** Success Metrics \n   *** Number of Downloads \n   *** User Retention Rate \n   *** Average Session Duration \n   *** User Ratings and Reviews \n   *** Social Media Engagement \n   ** Possible Channels \n   ** Social Media \n  *** Facebook Ads \n *** Instagram Stories and Posts \n *** TikTok Challenges \n ** YouTube Influencer Partnerships \n   ** Online Communities \n *** Reddit \n *** Local Gaming Forums \n *** Facebook Groups`;
+
   const startstring = "@startmindmap";
   const endstring = "\n@endmindmap";
   const mindmapstring2 = "";
@@ -69,6 +71,8 @@ export default function Home() {
   async function generateMindmap(e: String) {
     const mindmapstring = e;
 
+    setIsGenerating(true);
+
     const res = await fetch("/api/puppeteer", {
       method: "POST",
       body: JSON.stringify({ mindmapstring }),
@@ -78,6 +82,8 @@ export default function Home() {
     });
     const results = await res.json();
     setImgURL(results.imgURL);
+    setIsGenerating(false);
+    scrollToElement();
   }
 
   async function processPrompt(e: String) {
@@ -101,8 +107,8 @@ export default function Home() {
         const mindmap = startstring + mindmapstring + endstring;
 
         generateMindmap(mindmap);
-        chats.push(mindmap);
-        setChats([...chats]);
+        // chats.push(mindmap);
+        // setChats([...chats]);
       } catch (error) {
         console.error("An error occured", error);
         setPromptLoadingError(true);
@@ -136,15 +142,24 @@ export default function Home() {
 
     setFormData({ chatText: "" });
 
+    scrollToElement();
+
     return await response.json();
   }
+  const bottomAnchor = useRef<HTMLHeadingElement>(null);
+
+  const scrollToElement = () => {
+    if (bottomAnchor.current) {
+      bottomAnchor.current.scrollIntoView({ behavior: "smooth" });
+    }
+    console.log("Scrolling");
+  };
 
   // ----------------- Home Page ------------------------/
-
   return (
     <>
       <div>
-        <div className="fixed bottom-0 w-full border-2 flex justify-between">
+        <div className="fixed bottom-0 w-full border-2 flex justify-between bg-white">
           <form onSubmit={saveChat}>
             <input
               required
@@ -167,7 +182,7 @@ export default function Home() {
             </div>
           </button>
         </div>
-        <div>
+        <div className=" mb-32">
           <ChatWindow />
           {chats.map((chat) => (
             <div>
@@ -176,6 +191,8 @@ export default function Home() {
           ))}
           {promptLoading && <div>Loading ...</div>}
           {promptLoadingError && <div>An error occured.</div>}
+          {isGenerating && <div>Generating...</div>}
+
           {imgURL && (
             <div>
               <Image
@@ -187,6 +204,8 @@ export default function Home() {
               />
             </div>
           )}
+
+          <h1 ref={bottomAnchor}></h1>
         </div>
       </div>
     </>
