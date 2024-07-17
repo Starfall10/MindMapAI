@@ -1,13 +1,12 @@
 "use client";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { IoSendSharp } from "react-icons/io5";
-import { createRef, useRef, useState } from "react";
+import { useState } from "react";
 
 import useSWR from "swr";
 import React from "react";
 import axios from "axios";
 import ChatBubble from "./components/ChatBubble";
-import { useRouter } from "next/router";
 
 // ----------------- Fetch Chat ------------------------/
 
@@ -44,6 +43,8 @@ export default function Home() {
   const [formData, setFormData] = useState({
     chatText: "",
   });
+  const [promptLoading, setPromptLoading] = useState(false);
+  const [promptLoadingError, setPromptLoadingError] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -57,9 +58,39 @@ export default function Home() {
     formState: { errors },
   } = useForm();
 
+  async function processPrompt(e: String) {
+    console.log(e);
+
+    const prompt = e.trim();
+
+    if (prompt) {
+      try {
+        setPromptLoadingError(false);
+        setPromptLoading(true);
+
+        // const response = await fetch(
+        //   "/api/openai?prompt=" + encodeURIComponent(prompt)
+        // );
+        // const body = await response.json();
+        // console.log(body);
+
+        // chats.push(body.mindmap);
+
+        const mindmap = "This is a mindmap";
+        chats.push(mindmap);
+        setChats([...chats]);
+      } catch (error) {
+        console.error("An error occured", error);
+        setPromptLoadingError(true);
+      } finally {
+        setPromptLoading(false);
+      }
+    }
+  }
+
   async function saveChat(e: React.SyntheticEvent) {
     e.preventDefault();
-    console.log(formData.chatText);
+    // console.log(formData.chatText);
     const body = { chatText: formData.chatText };
     const response = await fetch("/api/chats", {
       method: "POST",
@@ -75,6 +106,10 @@ export default function Home() {
     chats.push(formData.chatText);
 
     setChats([...chats]);
+
+    const prompt = JSON.stringify(formData.chatText);
+    processPrompt(prompt);
+
     setFormData({ chatText: "" });
 
     return await response.json();
@@ -83,36 +118,42 @@ export default function Home() {
   // ----------------- Home Page ------------------------/
 
   return (
-    <div>
-      <div className="fixed bottom-0 w-full border-2 flex justify-between">
-        <form onSubmit={saveChat}>
-          <input
-            required
-            type="text"
-            name="chatText"
-            value={formData.chatText}
-            placeholder="Enter a mindmap topic"
-            className="focus:outline-none my-2 ml-2 w-80 select-none"
-            onChange={handleChange}
-          />
-        </form>
-        <button
-          type="submit"
-          className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
-                text-blue-500 hover:bg-green-600 hover:text-white
-                rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
-        >
-          <IoSendSharp />
-        </button>
-      </div>
+    <>
       <div>
-        <ChatWindow />
-        {chats.map((chat) => (
-          <div>
-            <ChatBubble text={chat} />
-          </div>
-        ))}
+        <div className="fixed bottom-0 w-full border-2 flex justify-between">
+          <form onSubmit={saveChat}>
+            <input
+              required
+              type="text"
+              name="chatText"
+              value={formData.chatText}
+              placeholder="Enter a mindmap topic"
+              className="focus:outline-none my-2 ml-2 w-80 "
+              onChange={handleChange}
+            />
+          </form>
+          <button
+            type="submit"
+            className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
+                  text-blue-500 hover:bg-blue-600 hover:text-white
+                  rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
+          >
+            <div>
+              <IoSendSharp />
+            </div>
+          </button>
+        </div>
+        <div>
+          <ChatWindow />
+          {chats.map((chat) => (
+            <div>
+              <ChatBubble text={chat} />
+            </div>
+          ))}
+          {promptLoading && <div>Loading ...</div>}
+          {promptLoadingError && <div>An error occured.</div>}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
