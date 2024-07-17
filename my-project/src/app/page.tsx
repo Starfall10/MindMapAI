@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import { IoSendSharp } from "react-icons/io5";
 import { useState } from "react";
+import Image from "next/image";
 
 import useSWR from "swr";
 import React from "react";
@@ -39,6 +40,13 @@ export function ChatWindow() {
 // ----------------- Contact API STUFF ------------------------/
 
 export default function Home() {
+  const [imgURL, setImgURL] = useState("");
+
+  const mindmapstring = `\n* mindmap`;
+  const startstring = "@startmindmap";
+  const endstring = "\n@endmindmap";
+  const mindmapstring2 = "";
+
   const [chats, setChats] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     chatText: "",
@@ -58,8 +66,22 @@ export default function Home() {
     formState: { errors },
   } = useForm();
 
+  async function generateMindmap(e: String) {
+    const mindmapstring = e;
+
+    const res = await fetch("/api/puppeteer", {
+      method: "POST",
+      body: JSON.stringify({ mindmapstring }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const results = await res.json();
+    setImgURL(results.imgURL);
+  }
+
   async function processPrompt(e: String) {
-    console.log(e);
+    // console.log(e);
 
     const prompt = e.trim();
 
@@ -76,7 +98,9 @@ export default function Home() {
 
         // chats.push(body.mindmap);
 
-        const mindmap = "This is a mindmap";
+        const mindmap = startstring + mindmapstring + endstring;
+
+        generateMindmap(mindmap);
         chats.push(mindmap);
         setChats([...chats]);
       } catch (error) {
@@ -152,6 +176,17 @@ export default function Home() {
           ))}
           {promptLoading && <div>Loading ...</div>}
           {promptLoadingError && <div>An error occured.</div>}
+          {imgURL && (
+            <div>
+              <Image
+                loader={({ src }) => src}
+                alt="Mindmap"
+                width={500}
+                height={500}
+                src={imgURL}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

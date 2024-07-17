@@ -11,7 +11,7 @@ export async function GET(
 ) {
     const prompt =  req.nextUrl.searchParams.get("prompt");
     
-    console.log("Prompt:", prompt);
+    // console.log("Prompt:", prompt);
 
     // if(!prompt) {
     //     return res.status(400).json({ error: "Prompt is required" });

@@ -28,7 +28,7 @@ export async function GET(
 ) {
 
   const chats = await prisma.chat.findMany()
-  console.log(chats)
+  // console.log(chats)
   return NextResponse.json(chats);
 
 }

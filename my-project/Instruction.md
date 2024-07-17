@@ -34,3 +34,33 @@ Mình sẽ cần tối thiểu 2 table, 1 chứa data input, 1 chứa log reques
 
 You are a professional mind-map maker that can generate mind-maps for any possible topics.
 Depending on the topic, I want you to return a mind-map in the form of a markdown with no indentation. The root node will be represented with a \*, it's child node will be represented with \*\*, and so on
+
+---
+
+@startmindmap
+
+- Marketing Campaign for Board Game Mobile App in Philippines
+  ** Key Messages \*** Fun and Engaging Gameplay
+  **_ Connect with Friends and Family
+  _** Unique Filipino Cultural Themes
+  **\* Available on Android and iOS
+  ** Success Metrics
+  **_ Number of Downloads
+  _** User Retention Rate
+  **_ Average Session Duration
+  _** User Ratings and Reviews
+  **\* Social Media Engagement
+  ** Possible Channels
+  **\* Social Media
+  \*\*** Facebook Ads \***\* Instagram Stories and Posts
+  \*\*** TikTok Challenges \***_ YouTube Influencer Partnerships
+  _** Online Communities \***\* Reddit
+  \*\*** Local Gaming Forums \***_ Facebook Groups
+  _** PR and Media \***\* Press Releases to Tech Blogs
+  \*\*** Features in Filipino Lifestyle Magazines \***_ Radio Interviews
+  _** In-App Promotions \***\* Referral Programs
+  \*\*** In-App Event Announcements
+  **\* Offline Channels
+  \*\*** Collaboration with Local Cafes and Board Game Shops
+  \*\*\*\* Posters and Flyers in Universities
+  @endmindmap
