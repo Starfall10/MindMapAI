@@ -8,6 +8,7 @@ import useSWR from "swr";
 import React from "react";
 import axios from "axios";
 import ChatBubble from "./components/ChatBubble";
+import TsParticles from "./components/TsParticles";
 
 // ----------------- Fetch Chat ------------------------/
 
@@ -38,6 +39,10 @@ export function ChatWindow() {
 }
 
 // ----------------- Contact API STUFF ------------------------/
+
+// ----------------- tsParticles ------------------------/
+
+// ----------------- Home Page ------------------------/
 
 export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -157,44 +162,49 @@ export default function Home() {
 
   // ----------------- Home Page ------------------------/
   return (
-    <>
-      <div>
-        <div className="fixed bottom-0 w-full border-2 flex justify-between bg-white">
-          <form onSubmit={saveChat}>
+    <div className="bg-black">
+      <div className="fixed z-0">
+        <TsParticles />
+      </div>
+      <div className="bg-black z-40">
+        <div className="fixed bottom-0 w-full border-2  bg-black z-40">
+          <form onSubmit={saveChat} className="flex justify-between">
             <input
               required
               type="text"
               name="chatText"
               value={formData.chatText}
               placeholder="Enter a mindmap topic"
-              className="focus:outline-none my-2 ml-2 w-80 "
+              className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40"
               onChange={handleChange}
             />
-          </form>
-          <button
-            type="submit"
-            className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
+            <button
+              type="submit"
+              className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
                   text-blue-500 hover:bg-blue-600 hover:text-white
                   rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
-          >
-            <div>
-              <IoSendSharp />
-            </div>
-          </button>
+            >
+              <div>
+                <IoSendSharp />
+              </div>
+            </button>
+          </form>
         </div>
-        <div className=" mb-32">
+        <div className=" pb-32 z-30">
           <ChatWindow />
           {chats.map((chat) => (
-            <div>
+            <div className="z-20">
               <ChatBubble text={chat} />
             </div>
           ))}
-          {promptLoading && <div>Loading ...</div>}
-          {promptLoadingError && <div>An error occured.</div>}
-          {isGenerating && <div>Generating...</div>}
+          {promptLoading && <div className="text-white">Loading ...</div>}
+          {promptLoadingError && (
+            <div className="text-white">An error occured.</div>
+          )}
+          {isGenerating && <div className="text-white">Generating...</div>}
 
           {imgURL && (
-            <div>
+            <div className="bg-black content-center z-40">
               <Image
                 loader={({ src }) => src}
                 alt="Mindmap"
@@ -205,9 +215,9 @@ export default function Home() {
             </div>
           )}
 
-          <h1 ref={bottomAnchor}></h1>
+          <h1 ref={bottomAnchor} className="bg-black"></h1>
         </div>
       </div>
-    </>
+    </div>
   );
 }

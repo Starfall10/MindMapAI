@@ -7,8 +7,8 @@ interface ChatBubbleProps {
 
 const ChatBubble = ({ text }: ChatBubbleProps) => {
   return (
-    <div className="mt-2 flex">
-      <span className="ml-2 mt-2 border-2 p-1 rounded-2xl flex bg-blue-400">
+    <div className="mt-2 flex ">
+      <span className="ml-2 mt-2 p-2 rounded-2xl flex bg-blue-400 z-30 ">
         {text}
       </span>
     </div>
