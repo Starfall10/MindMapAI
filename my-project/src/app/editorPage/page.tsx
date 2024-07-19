@@ -12,7 +12,7 @@ const mindmapstring = `\n* mindmap \n** Key Messages \n*** Connect with Friends 
 const TldrawPage = () => {
   return (
     <div className="flex flex-col bg-black ">
-      <div className=" w-full bg-black absolute bg-transparent">
+      <div className=" w-full z-10 bg-black absolute bg-transparent">
         <NavBar />
       </div>
       <div className="fixed z-0 top-0  w-full">
