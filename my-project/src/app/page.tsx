@@ -11,6 +11,8 @@ import ChatBubble from "./components/ChatBubble";
 import TsParticles from "./components/TsParticles";
 import Link from "next/link";
 import NavBar from "./components/NavBar";
+import { Button, Divider } from "@chakra-ui/react";
+import { TbTopologyComplex } from "react-icons/tb";
 
 // ----------------- Fetch Chat ------------------------/
 
@@ -125,6 +127,8 @@ export default function Home() {
     }
   }
 
+  const [isRevealChat, setIsRevealChat] = useState(false);
+
   async function saveChat(e: React.SyntheticEvent) {
     e.preventDefault();
     // console.log(formData.chatText);
@@ -161,10 +165,14 @@ export default function Home() {
     }
     console.log("Scrolling");
   };
+
+  function isRevealChatHandler() {
+    setIsRevealChat(!isRevealChat);
+  }
   // ----------------- Home Page ------------------------/
   return (
     <div className="bg-black">
-      <div className="fixed z-20 top-0  w-full">
+      <div className="fixed z-0 top-0  w-full">
         <TsParticles />
       </div>
       <div className=" w-full bg-black absolute bg-transparent">
@@ -172,59 +180,81 @@ export default function Home() {
           <NavBar />
         </div>
 
-        <div className=" z-40">
-          <div className="fixed bottom-0 w-full border-2 z-40">
-            <form onSubmit={saveChat} className="flex justify-between bg-black">
-              <input
-                required
-                type="text"
-                name="chatText"
-                value={formData.chatText}
-                autoComplete="off"
-                placeholder="Enter a mindmap topic"
-                className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40 "
-                onChange={handleChange}
-              />
-              <button
-                type="submit"
-                className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
+        {!isRevealChat && (
+          <div className="text-white item-center	z-40">
+            <div className="text-white">
+              <TbTopologyComplex />
+            </div>
+            <div>
+              <h1>Heading1</h1>
+            </div>
+            <div>
+              <h2>Subheading</h2>
+            </div>
+            <div className="z-40">
+              <Button onClick={isRevealChatHandler}>Button</Button>
+            </div>
+          </div>
+        )}
+
+        {isRevealChat && (
+          <div className=" z-40">
+            <div className="fixed bottom-0 w-full border-2 z-40">
+              <form
+                onSubmit={saveChat}
+                className="flex justify-between bg-black"
+              >
+                <input
+                  required
+                  type="text"
+                  name="chatText"
+                  value={formData.chatText}
+                  autoComplete="off"
+                  placeholder="Enter a mindmap topic"
+                  className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40 "
+                  onChange={handleChange}
+                />
+                <button
+                  type="submit"
+                  className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
                     text-blue-500 hover:bg-blue-600 hover:text-white
                     rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
-              >
-                <div>
-                  <IoSendSharp />
+                >
+                  <div>
+                    <IoSendSharp />
+                  </div>
+                </button>
+              </form>
+            </div>
+            <div className=" pb-32 z-30 h-full">
+              <ChatWindow />
+              {chats.map((chat) => (
+                <div className="z-20">
+                  <ChatBubble text={chat} />
                 </div>
-              </button>
-            </form>
-          </div>
-          <div className=" pb-32 z-30 h-full">
-            <ChatWindow />
-            {chats.map((chat) => (
-              <div className="z-20">
-                <ChatBubble text={chat} />
-              </div>
-            ))}
-            {promptLoading && <div className="text-white">Loading ...</div>}
-            {promptLoadingError && (
-              <div className="text-white">An error occured.</div>
-            )}
-            {isGenerating && <div className="text-white">Generating...</div>}
+              ))}
+              {promptLoading && <div className="text-white">Loading ...</div>}
+              {promptLoadingError && (
+                <div className="text-white">An error occured.</div>
+              )}
+              {isGenerating && <div className="text-white">Generating...</div>}
 
-            {imgURL && (
-              <div className="z-50">
-                <Image
-                  loader={({ src }) => src}
-                  alt="Mindmap"
-                  width={500}
-                  height={500}
-                  src={imgURL}
-                />
-              </div>
-            )}
+              {imgURL && (
+                <div className="z-50">
+                  <Image
+                    loader={({ src }) => src}
+                    alt="Mindmap"
+                    width={500}
+                    height={500}
+                    src={imgURL}
+                  />
+                </div>
+              )}
 
-            <h1 ref={bottomAnchor} className=""></h1>
+              <h1 ref={bottomAnchor} className=""></h1>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <div className="p-52 z-0 top-0 right-0  ">
         <p></p>
