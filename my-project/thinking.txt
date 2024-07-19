@@ -1,0 +1,30 @@
+*Head1
+
+**Body1
+***Root1
+***Root2
+***Root3
+
+**Body2
+***Root1
+***Root2
+***Root3
+
+head = 0
+body = 0
+root = 0
+
+loop through all characters
+	if char[i] == *
+		if char[i+1] == *
+			if char[i+2] == *
+				root += 1
+                print(rootNode)
+                linkTo(currentBody)
+			else:
+				body +=1
+                print(bodyNode)
+                linkTo(currentHead)
+		else
+			head += 1
+            print(headNode)

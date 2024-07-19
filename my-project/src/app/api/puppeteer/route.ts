@@ -35,6 +35,10 @@ export async function POST(req: Request) {
         ]);
 
 
+        
+
+        
+
         await page.screenshot({path: 'testing.png', fullPage: true});
 
         imgURL = await page.$eval('img#theimg', img => img.src);

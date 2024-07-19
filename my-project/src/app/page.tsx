@@ -30,7 +30,7 @@ export function ChatWindow() {
   if (!data) return <div>Loading ...</div>;
 
   return (
-    <div className="">
+    <div className="h-full">
       {data.data.map((chat: any) => (
         <ChatBubble text={chat.chat} />
       ))}
@@ -159,65 +159,70 @@ export default function Home() {
     }
     console.log("Scrolling");
   };
-
   // ----------------- Home Page ------------------------/
   return (
-    <div className="bg-black">
-      <div className="fixed z-0">
-        <TsParticles />
-      </div>
-      <div className="bg-black z-40">
-        <div className="fixed bottom-0 w-full border-2  bg-black z-40">
-          <form onSubmit={saveChat} className="flex justify-between">
-            <input
-              required
-              type="text"
-              name="chatText"
-              value={formData.chatText}
-              placeholder="Enter a mindmap topic"
-              className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40"
-              onChange={handleChange}
-            />
-            <button
-              type="submit"
-              className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
-                  text-blue-500 hover:bg-blue-600 hover:text-white
-                  rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
-            >
-              <div>
-                <IoSendSharp />
-              </div>
-            </button>
-          </form>
+    <>
+      <div className="bg-black">
+        <div className="fixed z-0 bg-black">
+          <TsParticles />
         </div>
-        <div className=" pb-32 z-30">
-          <ChatWindow />
-          {chats.map((chat) => (
-            <div className="z-20">
-              <ChatBubble text={chat} />
-            </div>
-          ))}
-          {promptLoading && <div className="text-white">Loading ...</div>}
-          {promptLoadingError && (
-            <div className="text-white">An error occured.</div>
-          )}
-          {isGenerating && <div className="text-white">Generating...</div>}
-
-          {imgURL && (
-            <div className="bg-black content-center z-40">
-              <Image
-                loader={({ src }) => src}
-                alt="Mindmap"
-                width={500}
-                height={500}
-                src={imgURL}
+        <div className="bg-black z-40">
+          <div className="fixed bottom-0 w-full border-2  bg-black z-40">
+            <form onSubmit={saveChat} className="flex justify-between">
+              <input
+                required
+                type="text"
+                name="chatText"
+                value={formData.chatText}
+                placeholder="Enter a mindmap topic"
+                className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40"
+                onChange={handleChange}
               />
-            </div>
-          )}
+              <button
+                type="submit"
+                className="border-2 items-center justify-center w-7 h-7 mt-2 mb-2 pl-1 pt-1 bg-gray-800 
+                    text-blue-500 hover:bg-blue-600 hover:text-white
+                    rounded-3xl hover:rounded-xl transition-all duration-300 ease-in-out"
+              >
+                <div>
+                  <IoSendSharp />
+                </div>
+              </button>
+            </form>
+          </div>
+          <div className=" pb-32 z-30 h-full">
+            <ChatWindow />
+            {chats.map((chat) => (
+              <div className="z-20">
+                <ChatBubble text={chat} />
+              </div>
+            ))}
+            {promptLoading && <div className="text-white">Loading ...</div>}
+            {promptLoadingError && (
+              <div className="text-white">An error occured.</div>
+            )}
+            {isGenerating && <div className="text-white">Generating...</div>}
 
-          <h1 ref={bottomAnchor} className="bg-black"></h1>
+            {imgURL && (
+              <div className="bg-black content-center z-40">
+                <Image
+                  loader={({ src }) => src}
+                  alt="Mindmap"
+                  width={500}
+                  height={500}
+                  src={imgURL}
+                />
+              </div>
+            )}
+
+            <h1 ref={bottomAnchor} className="bg-black"></h1>
+          </div>
         </div>
       </div>
-    </div>
+      //-------------------------- Tldraw --------------------------/
+      <div className="p-52 text-white z-0 top-0 right-0 border-2 border-white">
+        <p>TExt</p>
+      </div>
+    </>
   );
 }
