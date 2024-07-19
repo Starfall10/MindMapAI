@@ -163,22 +163,26 @@ export default function Home() {
   };
   // ----------------- Home Page ------------------------/
   return (
-    <>
-      <NavBar />
-      <div className="bg-black top-10 absolute">
-        <div className="fixed z-0 bg-black">
-          <TsParticles />
+    <div className="bg-black">
+      <div className="fixed z-20 top-0  w-full">
+        <TsParticles />
+      </div>
+      <div className=" w-full bg-black absolute bg-transparent">
+        <div className="z-30">
+          <NavBar />
         </div>
-        <div className="bg-black z-40">
-          <div className="fixed bottom-0 w-full border-2  bg-black z-40">
-            <form onSubmit={saveChat} className="flex justify-between">
+
+        <div className=" z-40">
+          <div className="fixed bottom-0 w-full border-2 z-40">
+            <form onSubmit={saveChat} className="flex justify-between bg-black">
               <input
                 required
                 type="text"
                 name="chatText"
                 value={formData.chatText}
+                autoComplete="off"
                 placeholder="Enter a mindmap topic"
-                className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40"
+                className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40 "
                 onChange={handleChange}
               />
               <button
@@ -207,7 +211,7 @@ export default function Home() {
             {isGenerating && <div className="text-white">Generating...</div>}
 
             {imgURL && (
-              <div className="bg-black content-center z-40">
+              <div className="z-50">
                 <Image
                   loader={({ src }) => src}
                   alt="Mindmap"
@@ -218,14 +222,13 @@ export default function Home() {
               </div>
             )}
 
-            <h1 ref={bottomAnchor} className="bg-black"></h1>
+            <h1 ref={bottomAnchor} className=""></h1>
           </div>
         </div>
       </div>
-      //-------------------------- Tldraw --------------------------/
-      <div className="p-52 text-white z-0 top-0 right-0 border-2 border-white">
-        <p>TExt</p>
+      <div className="p-52 z-0 top-0 right-0  ">
+        <p></p>
       </div>
-    </>
+    </div>
   );
 }

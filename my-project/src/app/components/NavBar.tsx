@@ -1,14 +1,16 @@
 import React from "react";
-
+import { TbTopologyComplex } from "react-icons/tb";
 const NavBar = () => {
   return (
-    <div>
-      <div className="bg-black text-white h-10 flex w-full justify-between p-2">
-        <div>logo</div>
-        <div className="flex mx-3 p-2">
-          <div className="mx-2">Link1</div>
-          <div>Link2</div>
-        </div>
+    <div className="bg-black text-white h-16 flex w-full justify-between p-2 items-center z-30">
+      <div className="text-6xl flex items-center	">
+        <TbTopologyComplex />
+        <span className="text-4xl font-bold">Logo</span>
+      </div>
+      <div className="flex mx-3 p-2 text-2xl font-semibold">
+        <div className="mx-2">Home</div>
+        <div className="mx-2">|</div>
+        <div className="mx-2">Editor</div>
       </div>
     </div>
   );

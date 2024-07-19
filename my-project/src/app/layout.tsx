@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={fonts.rubik.variable}>
+    <html lang="en" className="bg-black">
       <body>
         <Providers>{children}</Providers>
       </body>
