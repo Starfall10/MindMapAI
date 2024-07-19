@@ -9,6 +9,8 @@ import React from "react";
 import axios from "axios";
 import ChatBubble from "./components/ChatBubble";
 import TsParticles from "./components/TsParticles";
+import Link from "next/link";
+import NavBar from "./components/NavBar";
 
 // ----------------- Fetch Chat ------------------------/
 
@@ -162,7 +164,8 @@ export default function Home() {
   // ----------------- Home Page ------------------------/
   return (
     <>
-      <div className="bg-black">
+      <NavBar />
+      <div className="bg-black top-10 absolute">
         <div className="fixed z-0 bg-black">
           <TsParticles />
         </div>
