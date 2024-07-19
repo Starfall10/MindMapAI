@@ -44,26 +44,6 @@ function InsideOfContext() {
 
   editor.mark("first");
 
-  // for (let i = 0; i < boxes.length; i++) {
-  //   editor.createShapes([
-  //     {
-  //       id: createShapeId(boxes[i]),
-  //       type: "geo",
-  //       x: 100 + 150 * i,
-  //       y: 100 + 150 * i,
-  //       props: {
-  //         geo: "cloud",
-  //         w: 100,
-  //         h: 100,
-  //         dash: "draw",
-  //         color: "blue",
-  //         size: "m",
-  //         text: boxes[i],
-  //       },
-  //     },
-  //   ]);
-  // }
-
   for (let i = 1; i < splitArray.length; i++) {
     let xSpace = 0;
     if (splitArray[i][0] === " ") {
@@ -71,10 +51,10 @@ function InsideOfContext() {
       xSpace = 0;
     } else if (splitArray[i][0] === "*" && splitArray[i][1] !== "*") {
       console.log("\t " + splitArray[i]);
-      xSpace = 1000;
+      xSpace = 300;
     } else if (splitArray[i][0] === "*" && splitArray[i][1] === "*") {
       console.log("\t \t " + splitArray[i]);
-      xSpace = 1000 * 2;
+      xSpace = 300 * 2;
     }
 
     editor.createShapes([
@@ -85,7 +65,7 @@ function InsideOfContext() {
         y: 100 + 150 * i,
         props: {
           geo: "cloud",
-          w: 1000,
+          w: 500,
           h: 100,
           dash: "draw",
           color: "blue",
@@ -96,24 +76,7 @@ function InsideOfContext() {
     ]);
   }
 
-  // editor.createShapes([
-  //   {
-  //     id: createShapeId("arrow"),
-  //     type: "arrow",
-  //     x: 100,
-  //     y: 100,
-  //     props: {
-  //       start: { x: 100, y: 100 },
-  //       end: { x: 200, y: 200 },
-  //       color: "black",
-  //       width: 2,
-  //     },
-  //   },
-  // ]);
-
-  // editor.deleteShapes([createShapeId("1")]);
-
-  editor.setCamera({ x: 0, y: 0, z: 0.7 });
+  editor.setCamera({ x: 0, y: 0, z: 0.4 });
   editor.setCurrentTool("hand");
 
   return null; // or whatever

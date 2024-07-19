@@ -181,18 +181,23 @@ export default function Home() {
         </div>
 
         {!isRevealChat && (
-          <div className="text-white item-center	z-40">
-            <div className="text-white">
+          <div className="text-white item-center z-40 w-full  flex flex-col items-center justify-center pt-32">
+            <div className="text-white text-9xl my-4">
               <TbTopologyComplex />
             </div>
             <div>
-              <h1>Heading1</h1>
+              <h1 className="text-3xl my-2">
+                Unlock Your Creativity: Mind Map Generator for Innovative Ideas
+              </h1>
             </div>
             <div>
-              <h2>Subheading</h2>
+              <h2 className="text-xl my-2">
+                Transform Your Thoughts into Visual Journeys and Ignite Your
+                Imagination!
+              </h2>
             </div>
-            <div className="z-40">
-              <Button onClick={isRevealChatHandler}>Button</Button>
+            <div className="my-3">
+              <Button onClick={isRevealChatHandler}>Get started</Button>
             </div>
           </div>
         )}
