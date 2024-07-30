@@ -6,29 +6,34 @@ import { text } from "stream/consumers";
 import mermaid from "mermaid";
 import { split } from "postcss/lib/list";
 
+import { set, useForm } from "react-hook-form";
+import { IoSendSharp } from "react-icons/io5";
+import { useRef, useState } from "react";
+import Image from "next/image";
+
+import useSWR from "swr";
+import axios from "axios";
+import Link from "next/link";
+import { Button, Divider } from "@chakra-ui/react";
+import { TbTopologyComplex } from "react-icons/tb";
+
+interface TldrawCompoProps {
+  passingText?: string;
+}
+
 const boxes = ["box1", "box2", "box3", "box4"];
-const mindmapstring1 = `\n* mindmap\n** Key Messages\n*** Connect with Friends and Family\n*** Unique Filipino Cultural Themes\n*** Available on Android and iOS \n** Success Metrics \n*** Number of Downloads \n*** User Retention Rate \n*** Average Session Duration \n*** User Ratings and Reviews \n*** Social Media Engagement \n** Possible Channels \n** Social Media \n*** Facebook Ads \n*** Instagram Stories and Posts \n*** TikTok Challenges \n** YouTube Influencer Partnerships \n** Online Communities \n*** Reddit \n*** Local Gaming Forums \n*** Facebook Groups`;
-const mindmapstring = ` * mindmap ** Key Messages *** Connect with Friends and Family *** Unique Filipino Cultural Themes *** Available on Android and iOS ** Success Metrics *** Number of Downloads *** User Retention Rate *** Average Session Duration *** User Ratings and Reviews *** Social Media Engagement *** Possible Channels ** Social Media *** Facebook Ads *** Instagram Stories and Posts *** TikTok Challenges *** YouTube Influencer Partnerships ** Online Communities *** Reddit *** Local Gaming Forums *** Facebook Groups`;
+const mindmapstring = ` * mindmap **  Messages *** Connect with Friends and Family *** Unique Filipino Cultural Themes *** Available on Android and iOS ** Success Metrics *** Number of Downloads *** User Retention Rate *** Average Session Duration *** User Ratings and Reviews *** Social Media Engagement *** Possible Channels ** Social Media *** Facebook Ads *** Instagram Stories and Posts *** TikTok Challenges *** YouTube Influencer Partnerships ** Online Communities *** Reddit *** Local Gaming Forums *** Facebook Groups`;
 
-let head = 0;
-let body = 0;
-let tail = 0;
-let splitArray = mindmapstring.split(" *");
+function getMindMapString() {
+  //   const data = useSWR("../api/chats", fetcher);
+  const { data, error } = useSWR("", fetch);
+  // console.log("Data:", data);
+  // console.log("Error:", error);
 
-for (let i = 0; i < mindmapstring.length; i++) {
-  if (
-    mindmapstring[i] === "*" &&
-    mindmapstring[i + 1] === "*" &&
-    mindmapstring[i + 2] === "*"
-  ) {
-    tail++;
-    i = i + 2;
-  } else if (mindmapstring[i] === "*" && mindmapstring[i + 1] === "*") {
-    body++;
-    i = i + 1;
-  } else if (mindmapstring[i] === "*") {
-    head++;
-  }
+  if (error) return <div>An error occured.</div>;
+  if (!data) return <div>Loading ...</div>;
+
+  return <div className="h-full"></div>;
 }
 
 const TldrawCompo = () => {
@@ -40,6 +45,29 @@ const TldrawCompo = () => {
 };
 
 function InsideOfContext() {
+  getMindMapString();
+
+  let head = 0;
+  let body = 0;
+  let tail = 0;
+  let splitArray = mindmapstring.split(" *");
+
+  for (let i = 0; i < mindmapstring.length; i++) {
+    if (
+      mindmapstring[i] === "*" &&
+      mindmapstring[i + 1] === "*" &&
+      mindmapstring[i + 2] === "*"
+    ) {
+      tail++;
+      i = i + 2;
+    } else if (mindmapstring[i] === "*" && mindmapstring[i + 1] === "*") {
+      body++;
+      i = i + 1;
+    } else if (mindmapstring[i] === "*") {
+      head++;
+    }
+  }
+
   const editor = useEditor();
 
   editor.mark("first");
@@ -47,13 +75,13 @@ function InsideOfContext() {
   for (let i = 1; i < splitArray.length; i++) {
     let xSpace = 0;
     if (splitArray[i][0] === " ") {
-      console.log(splitArray[i]);
+      // console.log(splitArray[i]);
       xSpace = 0;
     } else if (splitArray[i][0] === "*" && splitArray[i][1] !== "*") {
-      console.log("\t " + splitArray[i]);
+      // console.log("\t " + splitArray[i]);
       xSpace = 300;
     } else if (splitArray[i][0] === "*" && splitArray[i][1] === "*") {
-      console.log("\t \t " + splitArray[i]);
+      // console.log("\t \t " + splitArray[i]);
       xSpace = 300 * 2;
     }
 

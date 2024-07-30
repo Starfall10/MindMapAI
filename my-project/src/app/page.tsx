@@ -115,7 +115,7 @@ export default function Home() {
         // chats.push(body.mindmap);
         console.log("Chats: " + body.mindmap);
         const mindmap = startstring + body.mindmap + endstring;
-
+        setGeneratedText(mindmap);
         saveResponse(mindmap);
 
         generateMindmap(mindmap);
@@ -162,7 +162,9 @@ export default function Home() {
 
     // Refresh chat and clear input field
     chats.push(formData.chatText);
+    console.log("formData.chatText: " + formData.chatText);
     setChats([...chats]);
+    console.log("Chats: " + chats);
 
     const prompt = JSON.stringify(formData.chatText);
     processPrompt(prompt);
@@ -256,7 +258,7 @@ export default function Home() {
               <ChatWindow />
               {chats.map((chat) => (
                 <div className="z-20">
-                  <ChatBubble text={chat} />
+                  <ChatBubble text={chat} isDisplay={true} />
                 </div>
               ))}
               {promptLoading && <div className="text-white">Loading ...</div>}
@@ -277,7 +279,14 @@ export default function Home() {
                     />
                   </div>
                   <Button>
-                    <a href="/editorPage">Edit</a>
+                    <Link
+                      href={{
+                        pathname: "/editorPage",
+                        query: { passingText: generatedText },
+                      }}
+                    >
+                      Edit
+                    </Link>
                   </Button>
                 </div>
               )}
