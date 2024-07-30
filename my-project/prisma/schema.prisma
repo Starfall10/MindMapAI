@@ -15,8 +15,9 @@ datasource db {
 }
 
 model Chat {
-  id   String @id @default(cuid())
-  chat String
+  id        String  @id @default(cuid())
+  chat      String
+  isDisplay Boolean
 }
 
 model Log {

@@ -51,10 +51,11 @@ export function ChatWindow() {
 export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [imgURL, setImgURL] = useState("");
+  const [generatedText, setGeneratedText] = useState("");
 
   const mindmapstring = `\n* mindmap \n** Key Messages \n  *** Connect with Friends and Family \n *** Unique Filipino Cultural Themes \n *** Available on Android and iOS \n  ** Success Metrics \n   *** Number of Downloads \n   *** User Retention Rate \n   *** Average Session Duration \n   *** User Ratings and Reviews \n   *** Social Media Engagement \n   ** Possible Channels \n   ** Social Media \n  *** Facebook Ads \n *** Instagram Stories and Posts \n *** TikTok Challenges \n ** YouTube Influencer Partnerships \n   ** Online Communities \n *** Reddit \n *** Local Gaming Forums \n *** Facebook Groups`;
 
-  const startstring = "@startmindmap";
+  const startstring = "@startmindmap \n ";
   const endstring = "\n@endmindmap";
   const mindmapstring2 = "";
 
@@ -105,19 +106,21 @@ export default function Home() {
         setPromptLoadingError(false);
         setPromptLoading(true);
 
-        // const response = await fetch(
-        //   "/api/openai?prompt=" + encodeURIComponent(prompt)
-        // );
-        // const body = await response.json();
-        // console.log(body);
+        const response = await fetch(
+          "/api/openai?prompt=" + encodeURIComponent(prompt)
+        );
+        const body = await response.json();
+        console.log("BODY: " + body);
 
         // chats.push(body.mindmap);
-
-        const mindmap = startstring + mindmapstring + endstring;
+        console.log("Chats: " + body.mindmap);
+        const mindmap = startstring + body.mindmap + endstring;
+        saveResponse(mindmap);
 
         generateMindmap(mindmap);
+
         // chats.push(mindmap);
-        // setChats([...chats]);
+        setChats([...chats]);
       } catch (error) {
         console.error("An error occured", error);
         setPromptLoadingError(true);
@@ -127,12 +130,27 @@ export default function Home() {
     }
   }
 
+  async function saveResponse(generatedResponse: string) {
+    const body = { chatText: generatedResponse, isDisplay: false };
+    const response = await fetch("/api/chats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return await response.json();
+  }
+
   const [isRevealChat, setIsRevealChat] = useState(false);
 
   async function saveChat(e: React.SyntheticEvent) {
     e.preventDefault();
     // console.log(formData.chatText);
-    const body = { chatText: formData.chatText };
+    const body = { chatText: formData.chatText, isDisplay: true };
     const response = await fetch("/api/chats", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -215,9 +233,14 @@ export default function Home() {
                   name="chatText"
                   value={formData.chatText}
                   autoComplete="off"
-                  placeholder="Enter a mindmap topic"
+                  placeholder={
+                    isGenerating || promptLoading
+                      ? "Generating..."
+                      : "Enter mindmap topic"
+                  }
                   className="focus:outline-none my-2 ml-2 w-full bg-transparent text-white z-40 "
                   onChange={handleChange}
+                  disabled={isGenerating || promptLoading}
                 />
                 <button
                   type="submit"
@@ -245,7 +268,7 @@ export default function Home() {
               {isGenerating && <div className="text-white">Generating...</div>}
 
               {imgURL && (
-                <div className="z-50">
+                <div className="z-50 p-5">
                   <Image
                     loader={({ src }) => src}
                     alt="Mindmap"

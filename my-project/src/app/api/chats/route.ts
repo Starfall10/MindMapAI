@@ -10,10 +10,10 @@ export async function POST(
   res: NextApiResponse
 ) {
   const body = await req.json();
-  const { chatText } = body;
+  const { chatText, isDisplay } = body;
 
   const savedContact = await prisma.chat.create({
-    data: { chat: chatText },
+    data: { chat: chatText , isDisplay: isDisplay },
   });
 
 

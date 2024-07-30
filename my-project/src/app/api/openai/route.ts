@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_MY_KEY
 })
 
 export async function GET(
@@ -10,8 +10,7 @@ export async function GET(
     res: NextResponse
 ) {
     const prompt =  req.nextUrl.searchParams.get("prompt");
-    
-    // console.log("Prompt:", prompt);
+
 
     // if(!prompt) {
     //     return res.status(400).json({ error: "Prompt is required" });
@@ -21,17 +20,15 @@ export async function GET(
     //     return res.status(400).json({ error: "Prompt is too long" });
     // }
 
-    const completion = await openai.completions.create({
-        model: "gpt-3.5-turbo-instruct",
-        prompt: `Create a mindmap in the form of a markdown with no indentaion based on the following topic: ${prompt} : \n
-        `,
-        // max_tokens: 400,
-        temperature: 0.5,
-        presence_penalty: 0.0,
-        frequency_penalty: 0.0,
+    const completion = await openai.chat.completions.create({
+        messages: [
+            {"role": "system", "content": "You are a mindmap creator assistant. Generate a mindmap in the form of a markdown, with roots starting with \n* and branches with \n** and so on; there should be no ` symbol and no indetation"},
+            {"role": "user", "content": `${prompt}`},
+          ],
+        model: "gpt-4o-mini",
       });
 
-    const mindmap = completion.choices[0].text.trim();
+    const mindmap = completion.choices[0].message.content;
     // const mindmap = "This is a mindmap";
 
     return NextResponse.json({ mindmap });
