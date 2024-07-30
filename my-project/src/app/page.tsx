@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { IoSendSharp } from "react-icons/io5";
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -115,12 +115,10 @@ export default function Home() {
         // chats.push(body.mindmap);
         console.log("Chats: " + body.mindmap);
         const mindmap = startstring + body.mindmap + endstring;
+
         saveResponse(mindmap);
 
         generateMindmap(mindmap);
-
-        // chats.push(mindmap);
-        setChats([...chats]);
       } catch (error) {
         console.error("An error occured", error);
         setPromptLoadingError(true);
@@ -150,6 +148,7 @@ export default function Home() {
   async function saveChat(e: React.SyntheticEvent) {
     e.preventDefault();
     // console.log(formData.chatText);
+    setPromptLoading(true);
     const body = { chatText: formData.chatText, isDisplay: true };
     const response = await fetch("/api/chats", {
       method: "POST",
@@ -163,7 +162,6 @@ export default function Home() {
 
     // Refresh chat and clear input field
     chats.push(formData.chatText);
-
     setChats([...chats]);
 
     const prompt = JSON.stringify(formData.chatText);
@@ -268,14 +266,19 @@ export default function Home() {
               {isGenerating && <div className="text-white">Generating...</div>}
 
               {imgURL && (
-                <div className="z-50 p-5">
-                  <Image
-                    loader={({ src }) => src}
-                    alt="Mindmap"
-                    width={500}
-                    height={500}
-                    src={imgURL}
-                  />
+                <div>
+                  <div className="z-50 p-5">
+                    <Image
+                      loader={({ src }) => src}
+                      alt="Mindmap"
+                      width={500}
+                      height={500}
+                      src={imgURL}
+                    />
+                  </div>
+                  <Button>
+                    <a href="/editorPage">Edit</a>
+                  </Button>
                 </div>
               )}
 

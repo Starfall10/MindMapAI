@@ -10,11 +10,11 @@ const NavBar = () => {
       </div>
       <div className="flex mx-3 p-2 text-2xl font-semibold">
         <div className="mx-2">
-          <Link href="http://localhost:3000">Home</Link>
+          <Link href="../">Home</Link>
         </div>
         <div className="mx-2">|</div>
         <div className="mx-2">
-          <Link href="http://localhost:3000/editorPage">Editor</Link>
+          <Link href="../editorPage">Editor</Link>
         </div>
       </div>
     </div>
