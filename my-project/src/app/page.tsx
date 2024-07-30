@@ -36,7 +36,7 @@ export function ChatWindow() {
   return (
     <div className="h-full">
       {data.data.map((chat: any) => (
-        <ChatBubble text={chat.chat} />
+        <ChatBubble text={chat.chat} isDisplay={chat.isDisplay} />
       ))}
     </div>
   );
