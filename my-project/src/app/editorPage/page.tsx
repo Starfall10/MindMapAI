@@ -12,7 +12,8 @@ const mindmapstring = `\n* mindmap \n** Key Messages \n*** Connect with Friends 
 
 export default function TldrawPage() {
   const searchParams = useSearchParams();
-  const passingText = searchParams.get("passingText");
+  let passingText = "placeholder";
+  passingText = searchParams.get("passingText") ?? "";
   console.log("PassingText: " + passingText); // good
   return (
     <div className="flex flex-col bg-black ">
@@ -24,7 +25,7 @@ export default function TldrawPage() {
       </div>
       <div className="relative w-[90vw] h-[80vh] border-4 border-black mx-20 mt-32 tldraw__editor">
         <div style={{ position: "absolute", inset: 20 }}>
-          <TldrawCompo />
+          <TldrawCompo passingText={passingText} />
         </div>
       </div>
     </div>
